@@ -1,0 +1,146 @@
+{
+    "name" : "dmk/mkcache_queue",
+    "description" : "Clear the TYPO3 caches via a queue instead of doing it directly",
+    "type" : "typo3-cms-extension",
+    "keywords": [
+        "TYPO3 CMS",
+        "cache",
+        "queue",
+        "performance"
+    ],
+    "homepage" : "http://www.dmk-ebusiness.de/",
+    "license": "GPL-2.0-or-later",
+    "authors" : [{
+        "name" : "Hannes Bochmann",
+        "email" : "hannes.bochmann@dmk-ebusiness.de",
+        "role" : "Developer"
+    }],
+    "support": {
+        "email": "dev@dmk-ebusiness.de",
+        "source": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcache_queue",
+        "issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcache_queue"
+    },
+    "require" : {
+        "php": "^7.4 || ^8.0 || ^8.1 || ^8.2",
+        "typo3/cms-core" : "^11.5.7 || ^12.4"
+    },
+    "require-dev": {
+        "mikey179/vfsstream": "^1.6",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "sebastian/phpcpd": "^6.0",
+        "friendsofphp/php-cs-fixer": "^3.3",
+        "typo3/testing-framework": "^6.16 || ^7.0 || ^8.0",
+        "phpmd/phpmd": "^2.13",
+        "phpstan/phpstan": "^1.9",
+        "phpstan/extension-installer": "^1.2",
+        "saschaegerer/phpstan-typo3": "^1.8",
+        "captainhook/captainhook": "^5.14",
+        "phpcompatibility/php-compatibility": "^10@dev"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "DMK\\MkcacheQueue\\" : "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DMK\\MkcacheQueue\\Tests\\": "Tests"
+        }
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin",
+        "preferred-install": {
+            "*": "dist"
+        },
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "mkcache_queue",
+            "web-dir": ".Build/Web",
+            "app-dir": ".Build"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "mkdir -p .Build/Web/typo3conf/ext/",
+            "[ -L .Build/Web/typo3conf/ext/mkcache_queue ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mkcache_queue",
+            "[ -e .Build/bin/captainhook ] && .Build/bin/captainhook install -f -s || echo 'CaptainHook missing, skip install.'"
+        ],
+        "pre-qa": "[ -e .Build/bin/phpcs ] || composer update",
+        "runqa": [
+            "@pre-qa",
+            "@fix",
+            "@lint",
+            "@test"
+        ],
+        "lint:php": [
+            ".Build/bin/parallel-lint ./*"
+        ],
+        "lint": [
+            "@pre-qs",
+            "@lint:php"
+        ],
+        "test:phpcs": [
+            ".Build/bin/php-cs-fixer fix -v --dry-run --diff"
+        ],
+        "test:phpcompatibility": [
+            "@test:phpcompatibility:7.4",
+            "@test:phpcompatibility:8.0",
+            "@test:phpcompatibility:8.1",
+            "@test:phpcompatibility:8.2"
+        ],
+        "test:phpcompatibility:7.4": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.4"
+        ],
+        "test:phpcompatibility:8.0": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+        ],
+        "test:phpcompatibility:8.1": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1"
+        ],
+        "test:phpcompatibility:8.2": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.2"
+        ],
+        "test:phpmd": [
+            ".Build/bin/phpmd ./Classes text phpmd.xml"
+        ],
+        "test:phpstan": [
+            ".Build/bin/phpstan analyse -c phpstan.neon --memory-limit=512M"
+        ],
+        "test:phpcpd": [
+            "(test \"$(php -v | grep \"Xdebug v3\" | wc -l)\" = 0 && .Build/bin/phpcpd ./Classes) | true"
+        ],
+        "test:phpunit": [
+            ".Build/bin/phpunit -c phpunit.xml --whitelist=./Classes Tests"
+        ],
+        "test:phpunit-coverage": [
+            "XDEBUG_MODE=coverage .Build/bin/phpunit --coverage-text --log-junit=.Build/junit.xml --coverage-clover=.Build/coverage.xml -c phpunit.xml --whitelist=./Classes Tests"
+        ],
+        "test": [
+            "@pre-qs",
+            "@test:phpcs",
+            "@test:phpcompatibility",
+            "@test:phpmd",
+            "@test:phpstan",
+            "@test:phpcpd",
+            "@test:phpunit"
+        ],
+        "fix:phpcs": [
+            ".Build/bin/php-cs-fixer fix -v"
+        ],
+        "fix": [
+            "@pre-qs",
+            "@fix:phpcs"
+        ]
+
+    }
+}

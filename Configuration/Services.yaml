@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    DMK\MkcacheQueue\:
+        resource: '../Classes/*'
+
+    DMK\MkcacheQueue\Command\ProcessQueueCommand:
+        tags:
+            - name: 'console.command'
+              command: 'cache:process-queue'
+              schedulable: true
