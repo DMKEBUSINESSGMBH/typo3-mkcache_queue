@@ -226,7 +226,7 @@ class ProcessQueueCommandTest extends UnitTestCase
         ExtensionConfiguration $extensionConfiguration = null,
         Queue $queue = null,
         CacheManager $cacheManager = null,
-        ?array $methods = null
+        array $methods = null
     ): ProcessQueueCommand {
         $extensionConfiguration = $extensionConfiguration ?? $this->getMockBuilder(ExtensionConfiguration::class)
                 ->disableOriginalConstructor()

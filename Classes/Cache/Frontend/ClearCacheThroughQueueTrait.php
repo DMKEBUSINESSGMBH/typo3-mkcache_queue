@@ -53,8 +53,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 trait ClearCacheThroughQueueTrait
 {
     /**
-     * {@inheritdoc}
-     *
      * @see AbstractFrontend::remove()
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
@@ -72,8 +70,6 @@ trait ClearCacheThroughQueueTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see AbstractFrontend::flush()
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
@@ -88,8 +84,6 @@ trait ClearCacheThroughQueueTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see AbstractFrontend::flushByTags()
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
@@ -104,8 +98,6 @@ trait ClearCacheThroughQueueTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see AbstractFrontend::flushByTag()
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
