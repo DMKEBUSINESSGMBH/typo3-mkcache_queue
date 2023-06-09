@@ -109,7 +109,7 @@ class ProcessQueueCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->extensionConfiguration->disableClearCacheQueue();
-        foreach ($this->queueUtility->findAllQueueEntries() as $queueEntry) {
+        foreach ($this->queueUtility->findAllQueueEntries()->fetchAllAssociative() as $queueEntry) {
             $this->collectClearCacheCommand($queueEntry);
             $this->queueUtility->deleteQueueEntry($queueEntry);
         }

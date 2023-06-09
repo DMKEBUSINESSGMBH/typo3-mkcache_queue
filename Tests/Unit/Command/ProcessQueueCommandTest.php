@@ -16,7 +16,7 @@ namespace DMK\MkcacheQueue\Tests\Command;
 use DMK\MkcacheQueue\Command\ProcessQueueCommand;
 use DMK\MkcacheQueue\Utility\ExtensionConfiguration;
 use DMK\MkcacheQueue\Utility\Queue;
-use Doctrine\DBAL\ForwardCompatibility\Result;
+use Doctrine\DBAL\Result;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -183,8 +183,8 @@ class ProcessQueueCommandTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $result->expects(self::once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayObject([['entry_1'], ['entry_2']]));
+            ->method('fetchAllAssociative')
+            ->willReturn([['entry_1'], ['entry_2']]);
         $queue->expects(self::once())
             ->method('findAllQueueEntries')
             ->willReturn($result);
