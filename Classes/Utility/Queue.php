@@ -115,17 +115,11 @@ class Queue
         $this->getDatabaseConnection()->insert(self::QUEUE_TABLE, $queueEntry);
     }
 
-    /**
-     * @param mixed $tags
-     */
     public function encodeTags($tags): string
     {
         return json_encode($tags);
     }
 
-    /**
-     * @return mixed
-     */
     public function decodeTags(string $tags)
     {
         return json_decode($tags, true);

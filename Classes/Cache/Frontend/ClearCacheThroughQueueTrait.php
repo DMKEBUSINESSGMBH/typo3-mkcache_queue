@@ -124,9 +124,6 @@ trait ClearCacheThroughQueueTrait
         }
     }
 
-    /**
-     * @return mixed
-     */
     protected function callMethodOnParent(string $methodName, array $arguments = [])
     {
         return call_user_func_array(['parent', $methodName], $arguments);
