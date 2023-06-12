@@ -17,7 +17,6 @@ namespace DMK\MkcacheQueue\Utility;
 
 use Symfony\Component\Console\Input\ArgvInput;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -50,7 +49,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class ExtensionConfiguration implements SingletonInterface
+class ExtensionConfiguration
 {
     /**
      * @var bool

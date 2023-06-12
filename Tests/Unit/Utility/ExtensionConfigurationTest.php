@@ -28,7 +28,6 @@ class ExtensionConfigurationTest extends UnitTestCase
 {
     protected function setUp(): void
     {
-        $this->resetSingletonInstances = true;
         parent::setUp();
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mkcache_queue'] = [

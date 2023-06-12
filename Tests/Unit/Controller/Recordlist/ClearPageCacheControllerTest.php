@@ -29,12 +29,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class ClearPageCacheControllerTest extends UnitTestCase
 {
-    protected function setUp(): void
-    {
-        $this->resetSingletonInstances = true;
-        parent::setUp();
-    }
-
     /**
      * @test
      */
@@ -44,7 +38,7 @@ class ClearPageCacheControllerTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['isDirectCacheClearDisabledCompletely'])
             ->getMock();
-        GeneralUtility::setSingletonInstance(ExtensionConfiguration::class, $extensionConfiguration);
+        GeneralUtility::addInstance(ExtensionConfiguration::class, $extensionConfiguration);
 
         $controller = $this->getMockBuilder(ClearPageCacheController::class)
             ->disableOriginalConstructor()

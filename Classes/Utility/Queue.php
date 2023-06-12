@@ -18,7 +18,6 @@ namespace DMK\MkcacheQueue\Utility;
 use Doctrine\DBAL\Result;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  *  Copyright notice.
@@ -50,7 +49,7 @@ use TYPO3\CMS\Core\SingletonInterface;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class Queue implements SingletonInterface
+class Queue
 {
     /**
      * @var ConnectionPool

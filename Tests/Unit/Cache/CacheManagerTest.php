@@ -29,12 +29,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class CacheManagerTest extends UnitTestCase
 {
-    protected function setUp(): void
-    {
-        $this->resetSingletonInstances = true;
-        parent::setUp();
-    }
-
     /**
      * @test
      */
@@ -53,7 +47,7 @@ class CacheManagerTest extends UnitTestCase
                 ['ignored_dummy_cache_variable'],
             )
             ->willReturnOnConsecutiveCalls(true, true, true, false);
-        GeneralUtility::setSingletonInstance(Registry::class, $registry);
+        GeneralUtility::addInstance(Registry::class, $registry);
 
         $cacheManager = $this->getAccessibleMock(CacheManager::class, ['registerCache']);
         $cacheManager->setCacheConfigurations([

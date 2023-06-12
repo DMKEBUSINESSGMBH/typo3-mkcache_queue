@@ -27,12 +27,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class SimpleDataHandlerControllerTest extends UnitTestCase
 {
-    protected function setUp(): void
-    {
-        $this->resetSingletonInstances = true;
-        parent::setUp();
-    }
-
     /**
      * @test
      */
@@ -42,7 +36,7 @@ class SimpleDataHandlerControllerTest extends UnitTestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['isDirectCacheClearDisabledCompletely'])
             ->getMock();
-        GeneralUtility::setSingletonInstance(ExtensionConfiguration::class, $extensionConfiguration);
+        GeneralUtility::addInstance(ExtensionConfiguration::class, $extensionConfiguration);
 
         $controller = $this->getAccessibleMock(
             SimpleDataHandlerController::class,
