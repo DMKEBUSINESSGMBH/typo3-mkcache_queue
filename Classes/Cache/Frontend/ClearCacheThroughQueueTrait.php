@@ -55,65 +55,62 @@ trait ClearCacheThroughQueueTrait
 {
     /**
      * @see AbstractFrontend::remove()
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function remove($entryIdentifier): bool
     {
         $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
-            $response = true;
             $this->getQueueUtility()->addQueueEntryForRemoveMethod($this->getIdentifier(), $entryIdentifier);
-        } else {
-            $response = $this->callMethodOnParent(__FUNCTION__, [$entryIdentifier]);
+
+            return true;
         }
 
-        return $response;
+        return $this->callMethodOnParent(__FUNCTION__, [$entryIdentifier]);
     }
 
     /**
      * @see AbstractFrontend::flush()
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function flush(): void
     {
         $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushMethod($this->getIdentifier());
-        } else {
-            $this->callMethodOnParent(__FUNCTION__);
+
+            return;
         }
+
+        $this->callMethodOnParent(__FUNCTION__);
     }
 
     /**
      * @see AbstractFrontend::flushByTags()
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function flushByTags(array $tags): void
     {
         $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushByTagsMethod($this->getIdentifier(), $tags);
-        } else {
-            $this->callMethodOnParent(__FUNCTION__, [$tags]);
+
+            return;
         }
+
+        $this->callMethodOnParent(__FUNCTION__, [$tags]);
     }
 
     /**
      * @see AbstractFrontend::flushByTag()
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function flushByTag($tag): void
     {
         $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushByTagMethod($this->getIdentifier(), $tag);
-        } else {
-            $this->callMethodOnParent(__FUNCTION__, [$tag]);
+
+            return;
         }
+
+        $this->callMethodOnParent(__FUNCTION__, [$tag]);
     }
 
     protected function validateParent(): void
