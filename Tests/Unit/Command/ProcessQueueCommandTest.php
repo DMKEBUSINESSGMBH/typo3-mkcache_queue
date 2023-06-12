@@ -125,7 +125,11 @@ class ProcessQueueCommandTest extends UnitTestCase
      */
     public function collectClearCacheCommand()
     {
-        $command = $this->getCommandMock();
+        $queue = $this->getMockBuilder(Queue::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addQueueEntry'])
+            ->getMock();
+        $command = $this->getCommandMock(null, $queue);
         $command->_set('removeCommands', []);
         $command->_set('flushByTagsCommands', []);
         $command->_set('flushCommands', []);

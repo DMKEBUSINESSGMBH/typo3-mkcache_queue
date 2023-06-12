@@ -93,18 +93,18 @@ class Queue
             [
                 'cache_identifier' => $cacheIdentifier,
                 'clear_cache_method' => 'flushByTags',
-                'tags' => json_encode($tags),
+                'tags' => $this->encodeTags($tags),
             ]
         );
     }
 
-    public function addQueueEntryForFlushByTagMethod(string $cacheIdentifier, $tag): void
+    public function addQueueEntryForFlushByTagMethod(string $cacheIdentifier, string $tag): void
     {
         $this->addQueueEntry(
             [
                 'cache_identifier' => $cacheIdentifier,
                 'clear_cache_method' => 'flushByTag',
-                'tags' => json_encode($tag),
+                'tags' => $this->encodeTags($tag),
             ]
         );
     }
@@ -113,6 +113,22 @@ class Queue
     {
         $queueEntry['hash'] = md5(serialize($queueEntry));
         $this->getDatabaseConnection()->insert(self::QUEUE_TABLE, $queueEntry);
+    }
+
+    /**
+     * @param mixed $tags
+     */
+    public function encodeTags($tags): string
+    {
+        return json_encode($tags);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function decodeTags(string $tags)
+    {
+        return json_decode($tags, true);
     }
 
     public function findAllQueueEntries(): Result

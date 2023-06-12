@@ -133,11 +133,13 @@ class ProcessQueueCommand extends Command
             case 'flushByTags':
                 $this->flushByTagsCommands[$queueEntry['cache_identifier']] = array_merge(
                     $this->flushByTagsCommands[$queueEntry['cache_identifier']] ?? [],
-                    json_decode($queueEntry['tags'], true)
+                    $this->queueUtility->decodeTags($queueEntry['tags'])
                 );
                 break;
             case 'flushByTag':
-                $this->flushByTagsCommands[$queueEntry['cache_identifier']][] = json_decode($queueEntry['tags'], true);
+                $this->flushByTagsCommands[$queueEntry['cache_identifier']][] = $this->queueUtility->decodeTags(
+                    $queueEntry['tags']
+                );
                 break;
         }
     }
