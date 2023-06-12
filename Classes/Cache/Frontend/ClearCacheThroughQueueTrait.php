@@ -57,7 +57,7 @@ trait ClearCacheThroughQueueTrait
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function remove($entryIdentifier)
+    public function remove($entryIdentifier): bool
     {
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $response = true;
@@ -74,7 +74,7 @@ trait ClearCacheThroughQueueTrait
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function flush()
+    public function flush(): void
     {
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushMethod($this->getIdentifier());
@@ -88,7 +88,7 @@ trait ClearCacheThroughQueueTrait
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function flushByTags(array $tags)
+    public function flushByTags(array $tags): void
     {
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushByTagsMethod($this->getIdentifier(), $tags);
@@ -102,7 +102,7 @@ trait ClearCacheThroughQueueTrait
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function flushByTag($tag)
+    public function flushByTag($tag): void
     {
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushByTagMethod($this->getIdentifier(), $tag);
@@ -111,6 +111,9 @@ trait ClearCacheThroughQueueTrait
         }
     }
 
+    /**
+     * @return mixed
+     */
     protected function callMethodOnParent(string $methodName, array $arguments = [])
     {
         return call_user_func_array(['parent', $methodName], $arguments);

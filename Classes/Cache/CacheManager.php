@@ -69,7 +69,7 @@ class CacheManager extends \TYPO3\CMS\Core\Cache\CacheManager
         );
     }
 
-    public function setCacheConfigurations(array $cacheConfigurations)
+    public function setCacheConfigurations(array $cacheConfigurations): void
     {
         parent::setCacheConfigurations($cacheConfigurations);
         $this->replaceDefaultCacheFrontendClasses();
