@@ -16,6 +16,7 @@ namespace DMK\MkcacheQueue\Tests\Cache\Frontend;
 use DMK\MkcacheQueue\Cache\Frontend\ClearCacheThroughQueueTrait;
 use DMK\MkcacheQueue\Utility\ExtensionConfiguration;
 use DMK\MkcacheQueue\Utility\Queue;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
@@ -53,7 +54,7 @@ class ClearCacheThroughQueueTraitTest extends UnitTestCase
             true,
             true,
             true,
-            ['callMethodOnParent', 'getExtensionConfiguration', 'getQueueUtility', 'getIdentifier']
+            ['callMethodOnParent', 'getExtensionConfiguration', 'getQueueUtility', 'getIdentifier', 'validateParent']
         );
 
         $this->trait->expects(self::any())
@@ -63,7 +64,7 @@ class ClearCacheThroughQueueTraitTest extends UnitTestCase
         $this->extensionConfiguration = $this->getMockBuilder(ExtensionConfiguration::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->trait->expects(self::once())
+        $this->trait->expects(self::any())
             ->method('getExtensionConfiguration')
             ->willReturn($this->extensionConfiguration);
 
@@ -219,5 +220,28 @@ class ClearCacheThroughQueueTraitTest extends UnitTestCase
             ->method('callMethodOnParent');
 
         $this->trait->flush();
+    }
+
+    /**
+     * @test
+     */
+    public function validateParent()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
+            'This trait can be used only with classes that implement '.FrontendInterface::class
+        );
+
+        $trait = $this->getMockForTrait(
+            ClearCacheThroughQueueTrait::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['callMethodOnParent', 'getExtensionConfiguration', 'getQueueUtility', 'getIdentifier']
+        );
+
+        $trait->flush();
     }
 }

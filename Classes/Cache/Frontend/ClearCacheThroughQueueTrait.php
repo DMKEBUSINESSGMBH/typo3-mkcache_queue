@@ -18,6 +18,7 @@ namespace DMK\MkcacheQueue\Cache\Frontend;
 use DMK\MkcacheQueue\Utility\ExtensionConfiguration;
 use DMK\MkcacheQueue\Utility\Queue;
 use TYPO3\CMS\Core\Cache\Frontend\AbstractFrontend;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -59,6 +60,7 @@ trait ClearCacheThroughQueueTrait
      */
     public function remove($entryIdentifier): bool
     {
+        $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $response = true;
             $this->getQueueUtility()->addQueueEntryForRemoveMethod($this->getIdentifier(), $entryIdentifier);
@@ -76,6 +78,7 @@ trait ClearCacheThroughQueueTrait
      */
     public function flush(): void
     {
+        $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushMethod($this->getIdentifier());
         } else {
@@ -90,6 +93,7 @@ trait ClearCacheThroughQueueTrait
      */
     public function flushByTags(array $tags): void
     {
+        $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushByTagsMethod($this->getIdentifier(), $tags);
         } else {
@@ -104,10 +108,19 @@ trait ClearCacheThroughQueueTrait
      */
     public function flushByTag($tag): void
     {
+        $this->validateParent();
         if ($this->getExtensionConfiguration()->isClearCacheQueueEnabled()) {
             $this->getQueueUtility()->addQueueEntryForFlushByTagMethod($this->getIdentifier(), $tag);
         } else {
             $this->callMethodOnParent(__FUNCTION__, [$tag]);
+        }
+    }
+
+    protected function validateParent(): void
+    {
+        if (!$this instanceof FrontendInterface) {
+            $message = 'This trait can be used only with classes that implement '.FrontendInterface::class;
+            throw new \RuntimeException($message);
         }
     }
 
