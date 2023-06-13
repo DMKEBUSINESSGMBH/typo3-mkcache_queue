@@ -1,5 +1,5 @@
 # cat=basic; type=string; label=Comma separated list of the caches to clear via queue instead of directly.
-cachesToClearThroughQueue = core, extbase, hash, imagesizes, l10n, dashboard_rss, fluid_template, assets, pages, pagesection, rootline
+cachesToClearThroughQueue = core, extbase, hash, imagesizes, l10n, dashboard_rss,  assets, pages, pagesection, rootline
 
 # cat=basic; type=boolean; label=Allow direct cache clear through cache:flush command, clear all caches in BE and clear cache of certain page in BE. So only actions like saving a record will clear the cache via the queue.
 disableDirectCacheClearCompletely = 0

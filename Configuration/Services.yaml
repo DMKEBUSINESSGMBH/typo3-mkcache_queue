@@ -12,3 +12,12 @@ services:
             - name: 'console.command'
               command: 'cache:process-queue'
               schedulable: true
+
+    DMK\MkcacheQueue\Utility\ExtensionConfiguration:
+        public: true
+
+    DMK\MkcacheQueue\Utility\Registry:
+        public: true
+
+    DMK\MkcacheQueue\Utility\Queue:
+        public: true

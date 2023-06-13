@@ -15,10 +15,11 @@ declare(strict_types=1);
 
 namespace DMK\MkcacheQueue\Cache;
 
-use DMK\MkcacheQueue\Cache\Frontend\PhpFrontend;
-use DMK\MkcacheQueue\Cache\Frontend\VariableFrontend;
+use DMK\MkcacheQueue\Cache\Frontend\QueueableFrontend;
 use DMK\MkcacheQueue\Utility\Registry;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\Core\Cache\FluidCacheInterface;
 
 /**
  *  Copyright notice.
@@ -52,44 +53,21 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class CacheManager extends \TYPO3\CMS\Core\Cache\CacheManager
 {
-    protected $cacheFrontendClassMap = [
-        \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class => VariableFrontend::class,
-        \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend::class => PhpFrontend::class,
-    ];
-
     /**
-     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     * @see \TYPO3\CMS\Core\Cache\CacheManager::registerCache()
      */
-    public function __construct(bool $disableCaching = false)
-    {
-        parent::__construct($disableCaching);
-
-        $this->defaultCacheConfiguration['frontend'] = $this->mapCacheFrontend(
-            $this->defaultCacheConfiguration['frontend']
-        );
-    }
-
-    public function setCacheConfigurations(array $cacheConfigurations): void
-    {
-        parent::setCacheConfigurations($cacheConfigurations);
-        $this->replaceDefaultCacheFrontendClasses();
-    }
-
-    protected function replaceDefaultCacheFrontendClasses(): void
+    public function registerCache(FrontendInterface $cache, array $groups = [])
     {
         $registry = GeneralUtility::makeInstance(Registry::class);
-        foreach ($this->cacheConfigurations as $cacheIdentifier => &$cacheConfiguration) {
-            if (
-                $registry->isCacheRegisteredToClearThroughQueue($cacheIdentifier)
-                && ($cacheConfiguration['frontend'] ?? false)
-            ) {
-                $cacheConfiguration['frontend'] = $this->mapCacheFrontend($cacheConfiguration['frontend']);
-            }
+        // The QueueableFrontend does not implement the FluidCacheInterface and therefore can't wrap
+        // those caches.
+        if (
+            $registry->isCacheRegisteredToClearThroughQueue($cache->getIdentifier())
+            && !$cache instanceof FluidCacheInterface
+        ) {
+            $cache = GeneralUtility::makeInstance(QueueableFrontend::class, $cache);
         }
-    }
 
-    protected function mapCacheFrontend(string $className): string
-    {
-        return $this->cacheFrontendClassMap[$className] ?? $className;
+        parent::registerCache($cache, $groups);
     }
 }
