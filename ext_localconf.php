@@ -13,16 +13,16 @@
 
 defined('TYPO3') || exit;
 
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Core\Cache\CacheManager::class] = [
-    'className' => \DMK\MkcacheQueue\Cache\CacheManager::class,
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Core\Cache\CacheManager::class] = [
+    'className' => DMK\MkcacheQueue\Cache\CacheManager::class,
 ];
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Recordlist\Controller\ClearPageCacheController::class] = [
-    'className' => \DMK\MkcacheQueue\Controller\Recordlist\ClearPageCacheController::class,
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Recordlist\Controller\ClearPageCacheController::class] = [
+    'className' => DMK\MkcacheQueue\Controller\Recordlist\ClearPageCacheController::class,
 ];
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\SimpleDataHandlerController::class] = [
-    'className' => \DMK\MkcacheQueue\Controller\Backend\SimpleDataHandlerController::class,
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Backend\Controller\SimpleDataHandlerController::class] = [
+    'className' => DMK\MkcacheQueue\Controller\Backend\SimpleDataHandlerController::class,
 ];
-\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\DMK\MkcacheQueue\Utility\ExtensionConfiguration::class)
+TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(DMK\MkcacheQueue\Utility\ExtensionConfiguration::class)
     ->disableClearCacheQueueForCacheFlushCliCommand();
-\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\DMK\MkcacheQueue\Utility\Registry::class)
+TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(DMK\MkcacheQueue\Utility\Registry::class)
     ->registerCachesToClearThroughQueueByConfiguration();

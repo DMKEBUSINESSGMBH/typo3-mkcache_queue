@@ -70,8 +70,8 @@ class QueueableFrontend implements FrontendInterface
 
     public function __construct(
         FrontendInterface $actualCache,
-        ExtensionConfiguration $extensionConfiguration = null,
-        Queue $queue = null
+        ?ExtensionConfiguration $extensionConfiguration = null,
+        ?Queue $queue = null
     ) {
         $this->actualCache = $actualCache;
         $this->extensionConfiguration = $extensionConfiguration

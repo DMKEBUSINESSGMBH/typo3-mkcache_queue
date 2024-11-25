@@ -86,10 +86,10 @@ class ProcessQueueCommand extends Command
     protected $removeCommands = [];
 
     public function __construct(
-        string $name = null,
-        ExtensionConfiguration $extensionConfiguration = null,
-        Queue $queueUtility = null,
-        CacheManager $cacheManager = null
+        ?string $name = null,
+        ?ExtensionConfiguration $extensionConfiguration = null,
+        ?Queue $queueUtility = null,
+        ?CacheManager $cacheManager = null
     ) {
         parent::__construct($name);
         $this->extensionConfiguration = $extensionConfiguration

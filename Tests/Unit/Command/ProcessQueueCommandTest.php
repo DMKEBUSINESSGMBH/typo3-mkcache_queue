@@ -227,10 +227,10 @@ class ProcessQueueCommandTest extends UnitTestCase
     }
 
     protected function getCommandMock(
-        ExtensionConfiguration $extensionConfiguration = null,
-        Queue $queue = null,
-        CacheManager $cacheManager = null,
-        array $methods = null
+        ?ExtensionConfiguration $extensionConfiguration = null,
+        ?Queue $queue = null,
+        ?CacheManager $cacheManager = null,
+        ?array $methods = null
     ): ProcessQueueCommand {
         $extensionConfiguration = $extensionConfiguration ?? $this->getMockBuilder(ExtensionConfiguration::class)
                 ->disableOriginalConstructor()

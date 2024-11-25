@@ -32,12 +32,12 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 class QueueableFrontendTest extends UnitTestCase
 {
     /**
-     * @var ExtensionConfiguration|\PHPUnit\Framework\MockObject\MockObject
+     * @var ExtensionConfiguration|MockObject
      */
     protected $extensionConfiguration;
 
     /**
-     * @var Queue|\PHPUnit\Framework\MockObject\MockObject
+     * @var Queue|MockObject
      */
     protected $queueUtility;
 
