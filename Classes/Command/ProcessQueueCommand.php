@@ -106,7 +106,7 @@ class ProcessQueueCommand extends Command
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->extensionConfiguration->disableClearCacheQueue();
         foreach ($this->queueUtility->findAllQueueEntries()->fetchAllAssociative() as $queueEntry) {
