@@ -21,7 +21,7 @@
         "issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mkcache_queue"
     },
     "require" : {
-        "php": "^7.4 || ^8.0 || ^8.1 || ^8.2",
+        "php": "^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3",
         "typo3/cms-core" : "^11.5.7 || ^12.4"
     },
     "require-dev": {
@@ -96,7 +96,8 @@
             "@test:phpcompatibility:7.4",
             "@test:phpcompatibility:8.0",
             "@test:phpcompatibility:8.1",
-            "@test:phpcompatibility:8.2"
+            "@test:phpcompatibility:8.2",
+            "@test:phpcompatibility:8.3"
         ],
         "test:phpcompatibility:7.4": [
             ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.4"
@@ -109,6 +110,9 @@
         ],
         "test:phpcompatibility:8.2": [
             ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.2"
+        ],
+        "test:phpcompatibility:8.3": [
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Public/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.3"
         ],
         "test:phpmd": [
             ".Build/bin/phpmd ./Classes text phpmd.xml"
