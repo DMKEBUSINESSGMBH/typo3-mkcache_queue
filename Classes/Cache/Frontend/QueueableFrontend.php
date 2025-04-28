@@ -3,14 +3,28 @@
 declare(strict_types=1);
 
 /*
+ * Copyright notice
+ *
  * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
- * This file is part of TYPO3 CMS-based extension "mkcache_queue" by DMK E-BUSINESS GmbH.
+ * This file is part of the "mkcache_queue" Extension for TYPO3 CMS.
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 namespace DMK\MkcacheQueue\Cache\Frontend;
@@ -22,29 +36,6 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- *  Copyright notice.
- *
- *  (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.com>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
  * Class QueueableFrontend.
  *
  * @author  Hannes Bochmann
@@ -53,27 +44,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class QueueableFrontend implements FrontendInterface
 {
-    /**
-     * @var FrontendInterface
-     */
-    protected $actualCache;
+    protected ExtensionConfiguration $extensionConfiguration;
 
-    /**
-     * @var ExtensionConfiguration
-     */
-    protected $extensionConfiguration;
-
-    /**
-     * @var Queue
-     */
-    protected $queue;
+    protected Queue $queue;
 
     public function __construct(
-        FrontendInterface $actualCache,
+        protected FrontendInterface $actualCache,
         ?ExtensionConfiguration $extensionConfiguration = null,
-        ?Queue $queue = null
+        ?Queue $queue = null,
     ) {
-        $this->actualCache = $actualCache;
         $this->extensionConfiguration = $extensionConfiguration
             ?? GeneralUtility::makeInstance(ExtensionConfiguration::class);
         $this->queue = $queue ?? GeneralUtility::makeInstance(Queue::class);
@@ -158,8 +137,10 @@ class QueueableFrontend implements FrontendInterface
 
     /**
      * @see FrontendInterface::getIdentifier()
+     *
+     * @param array<string> $tags
      */
-    public function set($entryIdentifier, $data, array $tags = [], $lifetime = null)
+    public function set($entryIdentifier, $data, array $tags = [], $lifetime = null): void
     {
         $this->actualCache->set($entryIdentifier, $data, $tags, $lifetime);
     }
@@ -204,7 +185,10 @@ class QueueableFrontend implements FrontendInterface
         return $this->actualCache->isValidTag($tag);
     }
 
-    public function __call($name, $arguments)
+    /**
+     * @param array<mixed, mixed> $arguments
+     */
+    public function __call(string $name, array $arguments): mixed
     {
         return $this->actualCache->$name(...$arguments);
     }

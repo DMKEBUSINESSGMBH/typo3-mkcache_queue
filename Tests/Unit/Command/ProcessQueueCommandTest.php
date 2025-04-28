@@ -1,14 +1,28 @@
 <?php
 
 /*
+ * Copyright notice
+ *
  * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
- * This file is part of TYPO3 CMS-based extension "mkcache_queue" by DMK E-BUSINESS GmbH.
+ * This file is part of the "mkcache_queue" Extension for TYPO3 CMS.
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 namespace DMK\MkcacheQueue\Tests\Command;
@@ -32,30 +46,47 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class ProcessQueueCommandTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
-    public function processRemoveCommands()
+    public function testProcessRemoveCommands(): void
     {
         $cache = $this->getMockBuilder(NullFrontend::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $cache->expects(self::exactly(4))
+        $matcher = self::exactly(4);
+        $cache->expects($matcher)
             ->method('remove')
-            ->withConsecutive(
-                ['entry_1'],
-                ['entry_2'],
-                ['entry_3'],
-                ['entry_4'],
+            ->with(
+                $this->callback(function (string $identifier) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => 'entry_1',
+                            2 => 'entry_2',
+                            3 => 'entry_3',
+                            4 => 'entry_4',
+                        },
+                        $identifier
+                    );
+
+                    return true;
+                }),
             );
         $cacheManager = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $cacheManager->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $cacheManager->expects($matcher)
             ->method('getCache')
-            ->withConsecutive(
-                ['identifier_1'],
-                ['identifier_2'],
+            ->with(
+                $this->callback(function (string $identifier) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => 'identifier_1',
+                            2 => 'identifier_2',
+                        },
+                        $identifier
+                    );
+
+                    return true;
+                }),
             )
             ->willReturnOnConsecutiveCalls($cache, $cache);
 
@@ -64,28 +95,45 @@ class ProcessQueueCommandTest extends UnitTestCase
         $command->_call('processRemoveCommands');
     }
 
-    /**
-     * @test
-     */
-    public function processFlushByTagsCommands()
+    public function testProcessFlushByTagsCommands(): void
     {
         $cache = $this->getMockBuilder(NullFrontend::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $cache->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $cache->expects($matcher)
             ->method('flushByTags')
-            ->withConsecutive(
-                [['tag_1', 'tag_2']],
-                [['tag_3', 'tag_4']],
+            ->with(
+                $this->callback(function (array $tags) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => ['tag_1', 'tag_2'],
+                            2 => ['tag_3', 'tag_4'],
+                        },
+                        $tags
+                    );
+
+                    return true;
+                }),
             );
         $cacheManager = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $cacheManager->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $cacheManager->expects($matcher)
             ->method('getCache')
-            ->withConsecutive(
-                ['identifier_1'],
-                ['identifier_2'],
+            ->with(
+                $this->callback(function (string $identifier) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => 'identifier_1',
+                            2 => 'identifier_2',
+                        },
+                        $identifier
+                    );
+
+                    return true;
+                }),
             )
             ->willReturnOnConsecutiveCalls($cache, $cache);
 
@@ -94,10 +142,7 @@ class ProcessQueueCommandTest extends UnitTestCase
         $command->_call('processFlushByTagsCommands');
     }
 
-    /**
-     * @test
-     */
-    public function processFlushCommands()
+    public function testProcessFlushCommands(): void
     {
         $cache = $this->getMockBuilder(NullFrontend::class)
             ->disableOriginalConstructor()
@@ -107,11 +152,21 @@ class ProcessQueueCommandTest extends UnitTestCase
         $cacheManager = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $cacheManager->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $cacheManager->expects($matcher)
             ->method('getCache')
-            ->withConsecutive(
-                ['identifier_3'],
-                ['identifier_4'],
+            ->with(
+                $this->callback(function (string $identifier) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => 'identifier_3',
+                            2 => 'identifier_4',
+                        },
+                        $identifier
+                    );
+
+                    return true;
+                }),
             )
             ->willReturnOnConsecutiveCalls($cache, $cache);
 
@@ -120,10 +175,7 @@ class ProcessQueueCommandTest extends UnitTestCase
         $command->_call('processFlushCommands');
     }
 
-    /**
-     * @test
-     */
-    public function collectClearCacheCommand()
+    public function testCollectClearCacheCommand(): void
     {
         $queue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()
@@ -159,7 +211,10 @@ class ProcessQueueCommandTest extends UnitTestCase
             ],
             $command->_get('removeCommands')
         );
-        self::assertSame(['identifier_1', 'identifier_2'], $command->_get('flushCommands'));
+        self::assertSame(
+            ['identifier_1' => 'identifier_1', 'identifier_2' => 'identifier_2'],
+            $command->_get('flushCommands')
+        );
         self::assertSame(
             [
                 'identifier_1' => ['tag_1', 'tag_2', 'tag_3', 'tag_4', 'tag_5', 'tag_6'],
@@ -169,10 +224,7 @@ class ProcessQueueCommandTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function execute()
+    public function testExecute(): void
     {
         $extensionConfiguration = $this->getMockBuilder(ExtensionConfiguration::class)
             ->disableOriginalConstructor()
@@ -192,11 +244,21 @@ class ProcessQueueCommandTest extends UnitTestCase
         $queue->expects(self::once())
             ->method('findAllQueueEntries')
             ->willReturn($result);
-        $queue->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $queue->expects($matcher)
             ->method('deleteQueueEntry')
-            ->withConsecutive(
-                [['entry_1']],
-                [['entry_2']],
+            ->with(
+                $this->callback(function (array $identifiers) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => ['entry_1'],
+                            2 => ['entry_2'],
+                        },
+                        $identifiers
+                    );
+
+                    return true;
+                }),
             );
 
         $command = $this->getCommandMock(
@@ -206,11 +268,21 @@ class ProcessQueueCommandTest extends UnitTestCase
             ['collectClearCacheCommand', 'processFlushCommands', 'processFlushByTagsCommands', 'processRemoveCommands']
         );
 
-        $command->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $command->expects($matcher)
             ->method('collectClearCacheCommand')
-            ->withConsecutive(
-                [['entry_1']],
-                [['entry_2']],
+            ->with(
+                $this->callback(function (array $identifiers) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => ['entry_1'],
+                            2 => ['entry_2'],
+                        },
+                        $identifiers
+                    );
+
+                    return true;
+                }),
             );
         $command->expects(self::once())
             ->method('processFlushCommands');
@@ -230,15 +302,15 @@ class ProcessQueueCommandTest extends UnitTestCase
         ?ExtensionConfiguration $extensionConfiguration = null,
         ?Queue $queue = null,
         ?CacheManager $cacheManager = null,
-        ?array $methods = null
+        ?array $methods = null,
     ): ProcessQueueCommand {
-        $extensionConfiguration = $extensionConfiguration ?? $this->getMockBuilder(ExtensionConfiguration::class)
+        $extensionConfiguration ??= $this->getMockBuilder(ExtensionConfiguration::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $queue = $queue ?? $this->getMockBuilder(Queue::class)
+        $queue ??= $this->getMockBuilder(Queue::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $cacheManager = $cacheManager ?? $this->getMockBuilder(CacheManager::class)
+        $cacheManager ??= $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -264,7 +336,7 @@ class ProcessQueueCommandTest extends UnitTestCase
                 'identifier_3' => ['tag_5', 'tag_6'],
             ]
         );
-        $command->_set('flushCommands', ['identifier_3' => true, 'identifier_4' => true]);
+        $command->_set('flushCommands', ['identifier_3' => 'identifier_3', 'identifier_4' => 'identifier_4']);
 
         return $command;
     }

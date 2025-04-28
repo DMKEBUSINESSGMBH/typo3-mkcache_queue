@@ -1,5 +1,5 @@
 parameters:
-    level: 2
+    level: 8
     paths:
         - %currentWorkingDirectory%/Classes
         - %currentWorkingDirectory%/ext_localconf.php

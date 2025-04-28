@@ -27,40 +27,38 @@ declare(strict_types=1);
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-namespace DMK\MkcacheQueue\Cache;
+namespace DMK\MkcacheQueue\Controller\Backend;
 
-use DMK\MkcacheQueue\Cache\Frontend\QueueableFrontend;
-use DMK\MkcacheQueue\Utility\Registry;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use DMK\MkcacheQueue\Utility\ExtensionConfiguration;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Cache\FluidCacheInterface;
 
 /**
- * Class CacheManager.
+ * Class ClearPageCacheController.
  *
  * @author  Hannes Bochmann
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class CacheManager extends \TYPO3\CMS\Core\Cache\CacheManager
+class ClearPageCacheController extends \TYPO3\CMS\Backend\Controller\ClearPageCacheController
 {
     /**
-     * @see \TYPO3\CMS\Core\Cache\CacheManager::registerCache()
-     *
-     * @param array<string> $groups
+     * Make sure it's still possible to clear the cache directly through manual cache clear in the BE.
      */
-    public function registerCache(FrontendInterface $cache, array $groups = []): void
+    public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        $registry = GeneralUtility::makeInstance(Registry::class);
-        // The QueueableFrontend does not implement the FluidCacheInterface and therefore can't wrap
-        // those caches.
-        if (
-            $registry->isCacheRegisteredToClearThroughQueue($cache->getIdentifier())
-            && !$cache instanceof FluidCacheInterface
-        ) {
-            $cache = GeneralUtility::makeInstance(QueueableFrontend::class, $cache);
-        }
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+        $extensionConfiguration->disableClearCacheQueue();
 
-        parent::registerCache($cache, $groups);
+        $response = $this->callMainActionOnParent($request);
+        $extensionConfiguration->enableClearCacheQueue();
+
+        return $response;
+    }
+
+    protected function callMainActionOnParent(ServerRequestInterface $request): ResponseInterface
+    {
+        return parent::mainAction($request);
     }
 }

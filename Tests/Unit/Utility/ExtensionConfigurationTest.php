@@ -1,14 +1,28 @@
 <?php
 
 /*
+ * Copyright notice
+ *
  * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
- * This file is part of TYPO3 CMS-based extension "mkcache_queue" by DMK E-BUSINESS GmbH.
+ * This file is part of the "mkcache_queue" Extension for TYPO3 CMS.
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 namespace DMK\MkcacheQueue\Tests\Utility;
@@ -36,10 +50,7 @@ class ExtensionConfigurationTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function getCachesToClearThroughQueue()
+    public function testGetCachesToClearThroughQueue(): void
     {
         $extensionConfiguration = GeneralUtility::makeInstance(
             ExtensionConfiguration::class,
@@ -55,10 +66,7 @@ class ExtensionConfigurationTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function isDirectCacheClearDisabledCompletely()
+    public function testIsDirectCacheClearDisabledCompletely(): void
     {
         $extensionConfiguration = GeneralUtility::makeInstance(
             ExtensionConfiguration::class,
@@ -70,10 +78,7 @@ class ExtensionConfigurationTest extends UnitTestCase
         self::assertFalse($extensionConfiguration->isDirectCacheClearDisabledCompletely());
     }
 
-    /**
-     * @test
-     */
-    public function disableAndEnableClearCacheQueue()
+    public function testDisableAndEnableClearCacheQueue(): void
     {
         $extensionConfiguration = GeneralUtility::makeInstance(
             ExtensionConfiguration::class,
@@ -95,10 +100,7 @@ class ExtensionConfigurationTest extends UnitTestCase
         self::assertTrue($extensionConfiguration->isClearCacheQueueEnabled());
     }
 
-    /**
-     * @test
-     */
-    public function disableClearCacheQueueForCacheFlushCliCommand()
+    public function testDisableClearCacheQueueForCacheFlushCliCommand(): void
     {
         $extensionConfiguration = GeneralUtility::makeInstance(
             ExtensionConfiguration::class,

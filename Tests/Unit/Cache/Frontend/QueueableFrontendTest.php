@@ -1,14 +1,28 @@
 <?php
 
 /*
+ * Copyright notice
+ *
  * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
- * This file is part of TYPO3 CMS-based extension "mkcache_queue" by DMK E-BUSINESS GmbH.
+ * This file is part of the "mkcache_queue" Extension for TYPO3 CMS.
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 namespace DMK\MkcacheQueue\Tests\Cache\Frontend;
@@ -34,12 +48,12 @@ class QueueableFrontendTest extends UnitTestCase
     /**
      * @var ExtensionConfiguration|MockObject
      */
-    protected $extensionConfiguration;
+    protected MockObject $extensionConfiguration;
 
     /**
      * @var Queue|MockObject
      */
-    protected $queueUtility;
+    protected MockObject $queueUtility;
 
     protected function setUp(): void
     {
@@ -60,10 +74,7 @@ class QueueableFrontendTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
-    public function flushByTagIfClearCacheQueueDisabled()
+    public function testFlushByTagIfClearCacheQueueDisabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -77,10 +88,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->flushByTag('test_tag');
     }
 
-    /**
-     * @test
-     */
-    public function flushByTagIfClearCacheQueueEnabled()
+    public function testFlushByTagIfClearCacheQueueEnabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::never())
@@ -94,10 +102,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->flushByTag('test_tag');
     }
 
-    /**
-     * @test
-     */
-    public function flushByTagsIfClearCacheQueueDisabled()
+    public function testFlushByTagsIfClearCacheQueueDisabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -111,10 +116,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->flushByTags(['test_tag']);
     }
 
-    /**
-     * @test
-     */
-    public function flushByTagsIfClearCacheQueueEnabled()
+    public function testFlushByTagsIfClearCacheQueueEnabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::never())
@@ -128,10 +130,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->flushByTags(['test_tag']);
     }
 
-    /**
-     * @test
-     */
-    public function removeIfClearCacheQueueDisabled()
+    public function testRemoveIfClearCacheQueueDisabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -146,10 +145,7 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertFalse($queueableFrontend->remove('test_tag'));
     }
 
-    /**
-     * @test
-     */
-    public function removeIfClearCacheQueueEnabled()
+    public function testRemoveIfClearCacheQueueEnabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::never())
@@ -163,10 +159,7 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertTrue($queueableFrontend->remove('test_tag'));
     }
 
-    /**
-     * @test
-     */
-    public function flushIfClearCacheQueueDisabled()
+    public function testFlushIfClearCacheQueueDisabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -179,10 +172,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->flush();
     }
 
-    /**
-     * @test
-     */
-    public function flushIfClearCacheQueueEnabled()
+    public function testFlushIfClearCacheQueueEnabled(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::never())
@@ -195,10 +185,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->flush();
     }
 
-    /**
-     * @test
-     */
-    public function getIdentifier()
+    public function testGetIdentifier(): void
     {
         $cache = $this->getNullFrontend();
 
@@ -206,10 +193,7 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertSame('test_cache', $queueableFrontend->getIdentifier());
     }
 
-    /**
-     * @test
-     */
-    public function getBackend()
+    public function testGetBackend(): void
     {
         $cache = $this->getNullFrontend();
         $backend = $this->getMockBuilder(BackendInterface::class)
@@ -223,10 +207,7 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertSame($backend, $queueableFrontend->getBackend());
     }
 
-    /**
-     * @test
-     */
-    public function set()
+    public function testSet(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -237,10 +218,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->set('test_entry', ['data'], ['tags'], 123);
     }
 
-    /**
-     * @test
-     */
-    public function get()
+    public function testGet(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -252,10 +230,7 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertSame('result', $queueableFrontend->get('test_entry'));
     }
 
-    /**
-     * @test
-     */
-    public function has()
+    public function testHas(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -267,10 +242,7 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertTrue($queueableFrontend->has('test_entry'));
     }
 
-    /**
-     * @test
-     */
-    public function collectGarbage()
+    public function testCollectGarbage(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -280,10 +252,7 @@ class QueueableFrontendTest extends UnitTestCase
         $queueableFrontend->collectGarbage();
     }
 
-    /**
-     * @test
-     */
-    public function isValidEntryIdentifier()
+    public function testIsValidEntryIdentifier(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -295,10 +264,7 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertTrue($queueableFrontend->isValidEntryIdentifier('test_entry'));
     }
 
-    /**
-     * @test
-     */
-    public function isValidTag()
+    public function testIsValidTag(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
@@ -310,24 +276,21 @@ class QueueableFrontendTest extends UnitTestCase
         self::assertTrue($queueableFrontend->isValidTag('test_entry'));
     }
 
-    /**
-     * @test
-     */
-    public function arbitraryMethodIsForwarded()
+    public function testArbitraryMethodIsForwarded(): void
     {
         $cache = $this->getNullFrontend();
         $cache->expects(self::once())
-            ->method('dummy')
+            ->method('requireOnce')
             ->with('test_entry')
             ->willReturn('result');
 
         $queueableFrontend = $this->getQueueableFrontend($cache, true);
-        self::assertSame('result', $queueableFrontend->dummy('test_entry'));
+        self::assertSame('result', $queueableFrontend->requireOnce('test_entry'));
     }
 
     protected function getQueueableFrontend(
         NullFrontend $actualCache,
-        bool $isClearCacheQueueEnabled
+        bool $isClearCacheQueueEnabled,
     ): QueueableFrontend {
         $this->extensionConfiguration->expects(self::any())
             ->method('isClearCacheQueueEnabled')
@@ -353,8 +316,8 @@ class QueueableFrontendTest extends UnitTestCase
                 'remove',
                 'flushByTags',
                 'flushByTag',
+                'requireOnce',
             ])
-            ->addMethods(['dummy'])
             ->getMock();
 
         $cache->expects(self::any())

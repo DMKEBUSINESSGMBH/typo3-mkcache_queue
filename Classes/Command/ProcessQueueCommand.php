@@ -3,14 +3,28 @@
 declare(strict_types=1);
 
 /*
+ * Copyright notice
+ *
  * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
- * This file is part of TYPO3 CMS-based extension "mkcache_queue" by DMK E-BUSINESS GmbH.
+ * This file is part of the "mkcache_queue" Extension for TYPO3 CMS.
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
  */
 
 namespace DMK\MkcacheQueue\Command;
@@ -24,29 +38,6 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- *  Copyright notice.
- *
- *  (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.com>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- */
-
-/**
  * Class ProcessQueueCommand.
  *
  * @author  Hannes Bochmann
@@ -55,41 +46,32 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ProcessQueueCommand extends Command
 {
-    /**
-     * @var ExtensionConfiguration
-     */
-    protected $extensionConfiguration;
+    protected ExtensionConfiguration $extensionConfiguration;
+
+    protected Queue $queueUtility;
+
+    protected CacheManager $cacheManager;
 
     /**
-     * @var Queue
+     * @var array <string, array<string>>
      */
-    protected $queueUtility;
+    protected array $flushByTagsCommands = [];
 
     /**
-     * @var CacheManager
+     * @var array <string, string>
      */
-    protected $cacheManager;
+    protected array $flushCommands = [];
 
     /**
-     * @var array
+     * @var array <string, array<string>>
      */
-    protected $flushByTagsCommands = [];
-
-    /**
-     * @var array
-     */
-    protected $flushCommands = [];
-
-    /**
-     * @var array
-     */
-    protected $removeCommands = [];
+    protected array $removeCommands = [];
 
     public function __construct(
         ?string $name = null,
         ?ExtensionConfiguration $extensionConfiguration = null,
         ?Queue $queueUtility = null,
-        ?CacheManager $cacheManager = null
+        ?CacheManager $cacheManager = null,
     ) {
         parent::__construct($name);
         $this->extensionConfiguration = $extensionConfiguration
@@ -104,7 +86,7 @@ class ProcessQueueCommand extends Command
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings("PHPMD.UnusedFormalParameter")
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -121,25 +103,34 @@ class ProcessQueueCommand extends Command
         return 0;
     }
 
+    /**
+     * @param array<string, string> $queueEntry
+     */
     protected function collectClearCacheCommand(array $queueEntry): void
     {
         switch ($queueEntry['clear_cache_method']) {
             case 'flush':
-                $this->flushCommands[] = $queueEntry['cache_identifier'];
+                $this->flushCommands[$queueEntry['cache_identifier']] = $queueEntry['cache_identifier'];
                 break;
             case 'remove':
                 $this->removeCommands[$queueEntry['cache_identifier']][] = $queueEntry['entry_identifier'];
                 break;
             case 'flushByTags':
-                $this->flushByTagsCommands[$queueEntry['cache_identifier']] = array_merge(
-                    $this->flushByTagsCommands[$queueEntry['cache_identifier']] ?? [],
-                    $this->queueUtility->decodeTags($queueEntry['tags'])
-                );
+                $decodedTags = $this->queueUtility->decodeTags($queueEntry['tags']);
+                if (is_array($decodedTags)) {
+                    $this->flushByTagsCommands[$queueEntry['cache_identifier']] = array_merge(
+                        $this->flushByTagsCommands[$queueEntry['cache_identifier']] ?? [],
+                        $decodedTags
+                    );
+                }
+
                 break;
             case 'flushByTag':
-                $this->flushByTagsCommands[$queueEntry['cache_identifier']][] = $this->queueUtility->decodeTags(
-                    $queueEntry['tags']
-                );
+                $decodedTags = $this->queueUtility->decodeTags($queueEntry['tags']);
+                if (is_string($decodedTags)) {
+                    $this->flushByTagsCommands[$queueEntry['cache_identifier']][] = $decodedTags;
+                }
+
                 break;
         }
     }

@@ -1,4 +1,4 @@
-name: "PHP Checks"
+name: "Quality Checks"
 
 on:
     push:
@@ -13,15 +13,13 @@ env:
 jobs:
 
     php-lint:
-        name: "PHP Lint"
+        name: "Linting"
 
         runs-on: "ubuntu-latest"
 
         strategy:
             matrix:
                 php-version:
-                    - "7.4"
-                    - "8.0"
                     - "8.1"
                     - "8.2"
                     - "8.3"
@@ -70,13 +68,12 @@ jobs:
             matrix:
                 command:
                     - "test:phpcs"
+                    - "test:rector"
                     - "test:phpcompatibility"
                     - "test:phpcpd"
                     - "test:phpmd"
                     - "test:phpstan"
                 php-version:
-                    - "7.4"
-                    - "8.0"
                     - "8.1"
                     - "8.2"
                     - "8.3"
@@ -85,6 +82,7 @@ jobs:
                 exclude:
                     - command: "test:phpcs"
                       php-version: "8.4"
+
         steps:
             -
                 name: "Checkout"
@@ -130,21 +128,6 @@ jobs:
             matrix:
                 include:
                     -
-                        typo3-version: "^11.5"
-                        php-version: "7.4"
-                    -
-                        typo3-version: "^11.5"
-                        php-version: "8.0"
-                    -
-                        typo3-version: "^11.5"
-                        php-version: "8.1"
-                    -
-                        typo3-version: "^11.5"
-                        php-version: "8.2"
-                    -
-                        typo3-version: "^11.5"
-                        php-version: "8.3"
-                    -
                         typo3-version: "^12.4"
                         php-version: "8.1"
                     -
@@ -155,6 +138,15 @@ jobs:
                         php-version: "8.3"
                     -
                         typo3-version: "^12.4"
+                        php-version: "8.4"
+                    -
+                        typo3-version: "^13.4"
+                        php-version: "8.2"
+                    -
+                        typo3-version: "^13.4"
+                        php-version: "8.3"
+                    -
+                        typo3-version: "^13.4"
                         php-version: "8.4"
 
         steps:
