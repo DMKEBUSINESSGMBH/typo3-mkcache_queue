@@ -90,7 +90,6 @@ class CacheManagerTest extends UnitTestCase
         self::assertInstanceOf(QueueableFrontend::class, $mappedCache);
 
         $property = new \ReflectionProperty($mappedCache, 'actualCache');
-        $property->setAccessible(true);
         self::assertSame($cache, $property->getValue($mappedCache));
     }
 
