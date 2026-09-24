@@ -1,10 +1,10 @@
 MK Cache Queue
 ==============
 
-![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-11.5%20%7C%2012.4-orange?maxAge=3600&style=flat-square&logo=typo3)
+![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-12.4%20%7C%2013.4-orange?maxAge=3600&style=flat-square&logo=typo3)
 [![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mkcache_queue.svg?maxAge=3600&style=flat-square&logo=composer)](https://packagist.org/packages/dmk/mkcache_queue)
 [![Total Downloads](https://img.shields.io/packagist/dt/dmk/mkcache_queue.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mkcache_queue)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/DMKEBUSINESSGMBH/typo3-mkcache_queue/php.yml?branch=12.4&maxAge=3600&style=flat-square&logo=github-actions)](https://github.com/DMKEBUSINESSGMBH/typo3-mkcache_queue/actions?query=workflow%3A%22PHP+Checks%22)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/DMKEBUSINESSGMBH/typo3-mkcache_queue/php.yml?maxAge=3600&style=flat-square&logo=github-actions)](https://github.com/DMKEBUSINESSGMBH/typo3-mkcache_queue/actions/workflows/php.yml)
 [![License](https://img.shields.io/packagist/l/dmk/mkcache_queue.svg?maxAge=3600&style=flat-square&logo=gnu)](https://packagist.org/packages/dmk/mkcache_queue)
 
 "***MK Cache Queue***" provides a queue for clearing the caches of TYPO3. So instead of clearing the caches
